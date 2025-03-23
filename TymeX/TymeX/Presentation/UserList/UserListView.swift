@@ -48,13 +48,18 @@ class UserListView: UIViewController {
         output.getUsersPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
-                self?.loadingIndicator.isHidden = true
+                self?.loadingIndicator.stopAnimating()
                 switch result {
                 case .success:
+                    self?.loadingIndicator.isHidden = true
                     self?.tableView.isHidden = false
                     self?.tableView.reloadData()
                 case .failure(let error):
-                    print("[Error] \(String(describing: error.errorDescription))")
+                    self?.showAlert(message: error.errorDescription ?? "n/a", buttonTitle: "Refresh", action: {
+                        self?.loadingIndicator.isHidden = false
+                        self?.loadingIndicator.startAnimating()
+                        self?.viewModel.input.reload()
+                    })
                 }
             }
             .store(in: &cancellables)
@@ -64,7 +69,10 @@ class UserListView: UIViewController {
 extension UserListView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.output.items.count + 1
+        if viewModel.output.items.count != 0 {
+            return viewModel.output.items.count + 1
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

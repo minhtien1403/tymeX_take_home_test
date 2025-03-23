@@ -9,6 +9,7 @@ import Combine
 
 protocol UserListViewModelInputType {
     
+    func reload()
     func loadUsers()
     func selectRepoTrigger(index: Int)
 }
@@ -64,6 +65,11 @@ final class UserListViewModel: UserListViewModelType {
 }
 
 extension UserListViewModel: UserListViewModelInputType {
+    
+    func reload() {
+        since = 0
+        getUsers()
+    }
     
     func loadUsers() {
         getUsers()
