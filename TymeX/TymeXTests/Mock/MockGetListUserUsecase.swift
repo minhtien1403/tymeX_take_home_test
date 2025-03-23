@@ -10,17 +10,20 @@ import Combine
 @testable import TymeX
 
 class MockGetListUserUsecase: GetListUserUsecase {
-    var getListUserResult: AnyPublisher<Result<[User], NetworkRequestError>, Never>!
+    
+    var getListUserClosure: ((Int, Int) -> AnyPublisher<Result<[User], NetworkRequestError>, Never>)?
     
     func getListUser(perPage: Int, since: Int) -> AnyPublisher<Result<[User], NetworkRequestError>, Never> {
-        return getListUserResult
+        return getListUserClosure?(perPage, since) ?? Just(.success([])).eraseToAnyPublisher()
     }
 }
 
+
 class MockUserListCoordinator: UserListCoordinator {
-    var navigatedToUserDetails: String?
+    
+    var userNameToNavigate: String?
     
     func goToUserDetails(username: String) {
-        navigatedToUserDetails = username
+        userNameToNavigate = username
     }
 }
