@@ -36,7 +36,7 @@ class UserListViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    // ✅ Test: `reload()` should reset `since = 0` and call usecase
+    // Test: `reload()` should reset `since = 0` and call usecase
     func testReloadCallsUsecaseWithSinceZero() {
         viewModel.since = 50  // Simulate a previous fetch
         let expectation = self.expectation(description: "Usecase called with since = 0")
@@ -51,7 +51,7 @@ class UserListViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    // ✅ Test: Fetch users successfully updates the users list
+    // Test: Fetch users successfully updates the users list
     func testGetUsersSuccess() {
         let expectedUsers = [
             User(login: "john_doe", avatarURL: "https://example.com/avatar1.png", htmlURL: "https://example.com/johndoe", id: 10)
@@ -82,7 +82,7 @@ class UserListViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    // ✅ Test: Failure case should publish an error
+    // Test: Failure case should publish an error
     func testLoadUsersFailure() {
         let expectedError = NetworkRequestError.badRequest
         let expectation = self.expectation(description: "Users fetch failed")
@@ -108,7 +108,7 @@ class UserListViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    // ✅ Test: `since` updates to 0 when last ID is nil
+    // Test: `since` updates to 0 when last ID is nil
     func testSinceBecomesZeroWhenLastIDIsNil() {
         let expectation = self.expectation(description: "Since becomes 0 when last user ID is nil")
 
@@ -128,6 +128,7 @@ class UserListViewModelTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
+    // Test: userNameToNavigate should be username selected
     func testSelectRepoTriggerCallsCoordinatorWithCorrectUsername() {
         // Given
         let expectedUser = User(
